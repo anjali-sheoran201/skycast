@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkyCast | Smart Weather & Agriculture</title>
+<style>
+:root{--forest:#143b2b;--green:#28784e;--lime:#b9e8c5;--bg:#f4f8f4;--card:#fff;--ink:#20342a;--muted:#718077;--line:#dce8df;--soft:#eaf5ed;--shadow:0 12px 34px rgba(25,65,43,.09)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif;line-height:1.55}
+header{position:sticky;top:0;z-index:10;background:rgba(20,59,43,.97);backdrop-filter:blur(12px);color:white;padding:13px clamp(16px,4vw,54px);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;box-shadow:0 5px 20px #102f241c}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-size:22px;font-weight:850;letter-spacing:-.5px}.brand-mark{display:grid;place-items:center;width:39px;height:39px;border-radius:13px;background:#ffffff20}
+nav{display:flex;gap:6px;flex-wrap:wrap}nav a{color:#e7f3ea;text-decoration:none;font-size:12px;font-weight:700;padding:8px 10px;border-radius:9px;white-space:nowrap}nav a:hover,nav a.active{background:#ffffff20;color:#c5f3d0}
+main{width:min(1160px,92%);margin:30px auto 70px}.page{display:none;animation:enter .25s ease}.page.active{display:block}@keyframes enter{from{opacity:.3;transform:translateY(7px)}to{opacity:1;transform:none}}
+.hero{position:relative;overflow:hidden;padding:clamp(28px,5vw,58px);border-radius:27px;color:#fff;background:radial-gradient(circle at 86% 18%,#6bb98555,transparent 28%),linear-gradient(120deg,#123c2b,#2e8056);box-shadow:var(--shadow)}
+.hero:after{content:"🌤";position:absolute;right:5%;bottom:-20px;font-size:clamp(90px,15vw,170px);opacity:.17}.eyebrow{font-size:11px;letter-spacing:2px;font-weight:850;color:#4b9568;text-transform:uppercase}.hero .eyebrow{color:#b8e8c7}.hero h1{font-size:clamp(34px,5.4vw,59px);line-height:1.04;letter-spacing:-2px;margin:12px 0}.hero h1 span{color:#b9efc8}.hero p{max-width:600px;color:#e0f0e5}.hero-search{display:flex;gap:10px;max-width:560px;margin-top:24px;position:relative;z-index:1}
+input,select,textarea{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);font:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:#65a97d;box-shadow:0 0 0 3px #65a97d20}
+button{border:0;border-radius:11px;background:var(--green);color:white;padding:12px 17px;font:inherit;font-size:14px;font-weight:800;cursor:pointer;transition:.2s}button:hover{background:#1d603d;transform:translateY(-1px)}button.secondary{background:#eaf5ed;color:#245e3d}button.secondary:hover{background:#d9ecdf}
+.hero-search input{flex:1;min-width:0}.hero-search button{background:#c9f0d2;color:#16442d}
+.section-head{margin:8px 0 22px}.section-head h1{font-size:clamp(30px,4vw,42px);letter-spacing:-1.2px;margin:5px 0}.section-head p{color:var(--muted);margin:4px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:16px;margin:20px 0}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:21px;box-shadow:var(--shadow)}.card h2,.card h3{margin:0 0 12px}.metric-label{font-size:12px;color:var(--muted);font-weight:750}.metric-value{font-size:34px;line-height:1.2;color:var(--green);font-weight:850;margin:7px 0}.muted{color:var(--muted)}.panel{background:white;border:1px solid var(--line);border-radius:20px;padding:clamp(18px,3vw,26px);margin:20px 0;box-shadow:var(--shadow)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px}.tile{padding:18px;background:var(--soft);border:1px solid #dceee1;border-radius:15px;text-align:left;cursor:pointer;color:#245c3c;font-weight:800}.tile span{display:block;font-size:24px;margin-bottom:7px}.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px;margin-bottom:17px}.form-grid label{font-size:13px;font-weight:800;color:#42564a}.form-grid input,.form-grid select{margin-top:6px}.result{padding:15px;border-radius:13px;background:var(--soft);margin-top:16px;white-space:normal}.result:empty{display:none}.result li{margin:7px 0}.forecast{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px}.forecast-day{background:#f5faf6;border:1px solid var(--line);padding:13px;border-radius:13px;text-align:center}.forecast-day strong{display:block;color:var(--green);font-size:19px}.bar-row{display:grid;grid-template-columns:100px 1fr 40px;gap:10px;align-items:center;margin:13px 0;font-size:13px}.bar-track{height:11px;background:#eaf2eb;border-radius:20px;overflow:hidden}.bar-fill{height:100%;background:linear-gradient(90deg,#28784e,#8bc89e);border-radius:20px}
+.season-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:15px}.season{border-radius:17px;padding:20px;background:linear-gradient(145deg,#f0f8f1,#fff);border:1px solid var(--line)}.season h3{margin:0 0 6px}.season ul{padding-left:20px}.season li{margin:7px 0}.chat-box{height:330px;overflow:auto;background:#f6faf7;border:1px solid var(--line);border-radius:14px;padding:15px}.bubble{max-width:86%;padding:11px 14px;border-radius:14px;margin:9px 0;background:#e8f4eb;white-space:pre-wrap}.bubble.user{margin-left:auto;background:#d9eee0}.chat-form{display:flex;gap:9px;margin-top:13px}.chat-form input{flex:1;min-width:0}.suggestions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#edf6ef;color:#365b43}.table-wrap{overflow-x:auto}
+.note{font-size:12px;color:var(--muted);margin-top:12px}.status{font-size:13px;color:var(--green);font-weight:700}.empty{color:var(--muted);padding:12px 0}
+footer{text-align:center;color:var(--muted);padding:25px;font-size:12px}
+@media(max-width:760px){header{align-items:flex-start}nav{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}nav a{font-size:11px}.hero-search,.chat-form{flex-direction:column}.hero-search button,.chat-form button{width:100%}.hero:after{right:0;bottom:-5px}.bar-row{grid-template-columns:78px 1fr 32px}}
+</style>
+</head>
+<body>
+<header>
+ <a class="brand" href="#weather"><span class="brand-mark">🌦</span> SkyCast</a>
+ <nav id="nav">
+  <a href="#weather" class="active">Weather</a><a href="#advisory">Advisory</a><a href="#crops">Crop Finder</a><a href="#calendar">Calendar</a><a href="#profile">Farmer Profile</a><a href="#analytics">Analytics</a><a href="#skybot">SkyBot</a><a href="#history">History</a>
+ </nav>
+</header>
+<main>
+<section class="page active" id="weather">
+ <div class="hero"><div class="eyebrow">SMART WEATHER PLATFORM</div><h1>Weather insights for<br><span>better farming.</span></h1><p>Check local weather and plan farm activities with a simple, farmer-friendly dashboard.</p>
+ <div class="hero-search"><input id="city" value="Palwal" placeholder="Enter your city"><button onclick="loadWeather()">Get Weather</button></div></div>
+ <div id="weather-result" class="grid"><div class="card">Enter a city to load live weather.</div></div>
+ <div class="panel"><h2>Explore SkyCast</h2><div class="tiles">
+ <button class="tile" onclick="showPage('advisory')"><span>🌱</span>Agriculture Advisory</button><button class="tile" onclick="showPage('crops')"><span>🌾</span>Crop Recommendation</button><button class="tile" onclick="showPage('calendar')"><span>🗓️</span>Farming Calendar</button><button class="tile" onclick="showPage('analytics')"><span>📊</span>Farm Analytics</button></div></div>
+</section>
+<section class="page" id="advisory"><div class="section-head"><div class="eyebrow">SMART AGRICULTURE MODULE</div><h1>Agriculture Advisory</h1><p>Generate general crop guidance from weather and field conditions.</p></div>
+ <div class="panel"><div class="form-grid">
+ <label>Crop<select id="crop"><option>Wheat</option><option>Rice</option><option>Mustard</option><option>Maize</option><option>Cotton</option><option>Potato</option><option>Chickpea</option></select></label>
+ <label>Soil type<select id="soil"><option>Loamy</option><option>Clay</option><option>Sandy</option><option>Black</option></select></label>
+ <label>Growth stage<select id="stage"><option>Sowing</option><option>Growing</option><option>Flowering</option><option>Harvesting</option></select></label>
+ <label>Temperature °C<input id="temp" type="number" value="25"></label><label>Humidity %<input id="humidity" type="number" value="55"></label><label>Rainfall mm<input id="rain" type="number" value="2"></label></div>
+ <button onclick="getAdvisory()">Generate Advice</button><div id="advice" class="result"></div></div>
+</section>
+<section class="page" id="crops"><div class="section-head"><div class="eyebrow">CROP SUITABILITY</div><h1>Crop Recommendation</h1><p>Compare crops using temperature, humidity and rainfall inputs.</p></div>
+ <div class="panel"><div class="form-grid"><label>Temperature °C<input id="ctemp" type="number" value="24"></label><label>Humidity %<input id="chumidity" type="number" value="55"></label><label>Rainfall mm<input id="crain" type="number" value="5"></label></div><button onclick="recommendCrops()">Find Suitable Crops</button><div id="crop-results" class="result"></div><p class="note">This is a rule-based educational estimate, not a trained machine-learning model. Confirm crop choice with local agricultural experts and soil testing.</p></div>
+</section>
+<section class="page" id="calendar"><div class="section-head"><div class="eyebrow">SEASONAL PLANNER</div><h1>Farming Calendar</h1><p>General seasonal reference for India. Exact dates vary by district, crop variety and weather.</p></div>
+ <div class="season-grid">
+ <div class="season"><h3>🌧️ Kharif · June–October</h3><p>Rice, maize, cotton and other monsoon crops.</p><ul><li>Prepare field and check seed quality before sowing.</li><li>Monitor weeds, pests and rainfall during growth.</li><li>Plan drainage during heavy rain.</li><li>Harvest at crop maturity in suitable weather.</li></ul></div>
+ <div class="season"><h3>❄️ Rabi · October–March</h3><p>Wheat, mustard, chickpea and other winter crops.</p><ul><li>Test soil and prepare the field.</li><li>Plan irrigation according to crop stage and soil moisture.</li><li>Monitor weeds and crop health.</li><li>Check maturity before harvesting.</li></ul></div>
+ <div class="season"><h3>☀️ Zaid · March–June</h3><p>Selected vegetables, watermelon and summer crops.</p><ul><li>Check water availability before planting.</li><li>Monitor heat stress and soil moisture.</li><li>Use locally recommended varieties.</li><li>Harvest at suitable maturity.</li></ul></div></div>
+</section>
+<section class="page" id="profile"><div class="section-head"><div class="eyebrow">FARMER DETAILS</div><h1>Farmer Profile</h1><p>Save a basic profile in this browser.</p></div>
+ <div class="panel"><div class="form-grid"><label>Farmer name<input id="farmer_name"></label><label>Mobile number<input id="mobile" inputmode="numeric"></label><label>City<input id="city_name"></label><label>Farm size (acres)<input id="farm_size" type="number" step=".1"></label><label>Soil type<select id="profile_soil"><option>Loamy</option><option>Clay</option><option>Sandy</option><option>Black</option></select></label><label>Preferred crop<select id="preferred_crop"><option>Wheat</option><option>Rice</option><option>Mustard</option><option>Maize</option><option>Cotton</option></select></label></div><button onclick="saveProfile()">Save Profile</button><div id="profile-message" class="result"></div></div>
+</section>
+<section class="page" id="analytics"><div class="section-head"><div class="eyebrow">YOUR ACTIVITY</div><h1>Farm Analytics Dashboard</h1><p>Overview of profiles and advisory activity saved in this browser.</p></div><div id="analytics-content" class="grid"></div></section>
+<section class="page" id="skybot"><div class="section-head"><div class="eyebrow">FARMING ASSISTANT</div><h1>🌱 SkyBot</h1><p>Ask basic questions about crops, soil, irrigation, fertilizer and weather.</p></div>
+ <div class="panel"><div id="chat-messages" class="chat-box"><div class="bubble">SkyBot: Namaste! Ask me about wheat, rice, soil, irrigation, fertilizer or weather.</div></div>
+ <div class="suggestions"><button class="secondary" onclick="ask('How should I care for wheat?')">Wheat</button><button class="secondary" onclick="ask('Tell me about soil testing')">Soil</button><button class="secondary" onclick="ask('How can I manage irrigation?')">Irrigation</button><button class="secondary" onclick="ask('What about fertilizer?')">Fertilizer</button></div>
+ <form class="chat-form" onsubmit="sendChat(event)"><input id="chat-input" placeholder="Type your question..." required><button>Send</button></form></div>
+</section>
+<section class="page" id="history"><div class="section-head"><div class="eyebrow">SAVED RECORDS</div><h1>Advisory History</h1><p>Your advisory results saved locally in this browser.</p></div>
+ <div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h2>Recent Advisories</h2><button class="secondary" onclick="clearHistory()">Clear History</button></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Crop</th><th>Soil</th><th>Stage</th><th>Advice</th></tr></thead><tbody id="history-body"></tbody></table></div></div>
+</section>
+</main>
+<footer>SkyCast · Smart Weather & Agriculture Advisory · Educational project</footer>
+<script>
+const $=id=>document.getElementById(id);
+const read=(k,fallback)=>{try{return JSON.parse(localStorage.getItem(k))??fallback}catch{return fallback}};
+const write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('active',a.hash==='#'+id));location.hash=id;if(id==='analytics')loadAnalytics();if(id==='history')loadHistory();window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();showPage(a.hash.slice(1))}));
+const first=(location.hash||'#weather').slice(1);if($(first))showPage(first);
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function loadWeather(){
+ const city=$('city').value.trim(),box=$('weather-result');if(!city)return;box.innerHTML='<div class="card">Loading weather...</div>';
+ try{
+  const geo=await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(city)+'&count=1&language=en&format=json');
+  const gd=await geo.json();if(!gd.results?.length)throw Error('City not found. Check spelling.');
+  const p=gd.results[0],place=[p.name,p.admin1,p.country].filter(Boolean).join(', ');
+  const url='https://api.open-meteo.com/v1/forecast?latitude='+p.latitude+'&longitude='+p.longitude+'&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,uv_index_max&forecast_days=7&timezone=auto';
+  const wr=await fetch(url),w=await wr.json(),c=w.current,d=w.daily;
+  box.innerHTML=`<div class="card"><span class="metric-label">📍 ${esc(place)}</span><h2>Current Weather</h2><div class="metric-value">${c.temperature_2m}°C</div><p>Feels like ${c.apparent_temperature}°C</p></div><div class="card"><span class="metric-label">HUMIDITY</span><div class="metric-value">${c.relative_humidity_2m}%</div><p>Wind ${c.wind_speed_10m} km/h</p></div><div class="card"><span class="metric-label">PRECIPITATION</span><div class="metric-value">${c.precipitation} mm</div><p>Current precipitation</p></div><div class="card"><span class="metric-label">7-DAY FORECAST</span><div class="forecast">${d.time.map((t,i)=>`<div class="forecast-day">${t.slice(5)}<strong>${d.temperature_2m_max[i]}°</strong><small>${d.temperature_2m_min[i]}°C · Rain ${d.precipitation_probability_max[i]}%</small></div>`).join('')}</div></div>`;
+  $('temp').value=c.temperature_2m;$('humidity').value=c.relative_humidity_2m;$('rain').value=c.precipitation;$('ctemp').value=c.temperature_2m;$('chumidity').value=c.relative_humidity_2m;$('crain').value=c.precipitation;
+ }catch(e){box.innerHTML='<div class="card">Weather error: '+esc(e.message)+'</div>'}
+}
+if($('weather-result'))loadWeather();
+function getAdvisory(){
+ const crop=$('crop').value,soil=$('soil').value,stage=$('stage').value,temp=Number($('temp').value),humidity=Number($('humidity').value),rain=Number($('rain').value);
+ let tips=[];if(rain>=10)tips.push('Rainfall is high: avoid unnecessary irrigation and check field drainage.');else if(rain<2)tips.push('Rainfall is low: check soil moisture before irrigating.');
+ if(temp>=35)tips.push('High temperature: monitor heat stress and consider irrigation during cooler hours.');else if(temp<=8)tips.push('Cool conditions: monitor crop growth and local cold-weather advisories.');
+ if(humidity>=80)tips.push('High humidity: inspect leaves regularly for fungal disease and follow local crop-protection advice.');
+ if(!tips.length)tips.push('Conditions appear moderate. Continue routine field monitoring.');
+ tips.push(`For ${crop} in ${soil} soil at ${stage} stage, use soil-test results and local agricultural guidance for nutrient decisions.`);
+ $('advice').innerHTML='<h3>Suggested guidance</h3><ul>'+tips.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';
+ const history=read('skycast_history',[]);history.unshift({date:new Date().toLocaleString(),crop,soil,stage,advice:tips.join(' ')});write('skycast_history',history.slice(0,50));
+}
+function recommendCrops(){
+ const t=Number($('ctemp').value),h=Number($('chumidity').value),r=Number($('crain').value);
+ const crops=[['Wheat',10,25,'Rabi','Moderate'],['Rice',20,35,'Kharif','High'],['Mustard',10,25,'Rabi','Low'],['Maize',18,32,'Kharif','Moderate'],['Cotton',21,35,'Kharif','Moderate'],['Potato',10,25,'Rabi','Moderate'],['Chickpea',15,30,'Rabi','Low']];
+ const scored=crops.map(([name,min,max,season,water])=>{let s=100;if(t<min)s-=Math.min(45,(min-t)*4);if(t>max)s-=Math.min(45,(t-max)*4);if(water==='High'&&r<5)s-=18;if(water==='Low'&&r>15)s-=12;if(h>85&&['Potato','Wheat'].includes(name))s-=5;return{name,score:Math.max(0,Math.min(100,Math.round(s))),season,water}}).sort((a,b)=>b.score-a.score).slice(0,3);
+ $('crop-results').innerHTML='<h3>Top 3 suggestions</h3>'+scored.map(x=>`<p><b>${x.name}</b> — ${x.score}% suitability · ${x.season} · ${x.water} water</p>`).join('');
+}
+function saveProfile(){
+ const p={farmer_name:$('farmer_name').value.trim(),mobile:$('mobile').value.trim(),city:$('city_name').value.trim(),farm_size:$('farm_size').value,soil:$('profile_soil').value,preferred_crop:$('preferred_crop').value};
+ if(Object.values(p).some(v=>!String(v).trim())||Number(p.farm_size)<=0){$('profile-message').textContent='Please complete all fields with a valid farm size.';return}
+ write('skycast_profile',p);$('profile-message').textContent='Farmer profile saved in this browser.';
+}
+function loadProfile(){const p=read('skycast_profile',{});Object.entries({farmer_name:'farmer_name',mobile:'mobile',city:'city_name',farm_size:'farm_size',soil:'profile_soil',preferred_crop:'preferred_crop'}).forEach(([k,id])=>{if(p[k]!==undefined)$(id).value=p[k]})}
+function loadAnalytics(){
+ const profile=read('skycast_profile',{}),history=read('skycast_history',[]),counts={};history.forEach(x=>counts[x.crop]=(counts[x.crop]||0)+1);const max=Math.max(1,...Object.values(counts));
+ $('analytics-content').innerHTML=`<div class="card"><span class="metric-label">SAVED FARMER PROFILES</span><div class="metric-value">${profile.farmer_name?1:0}</div><p>${profile.farmer_name?esc(profile.farmer_name):'No profile saved yet'}</p></div><div class="card"><span class="metric-label">ADVISORIES GENERATED</span><div class="metric-value">${history.length}</div><p>Stored in this browser</p></div><div class="card"><h3>Crop Advisory Counts</h3>${Object.entries(counts).length?Object.entries(counts).map(([k,v])=>`<div class="bar-row"><b>${esc(k)}</b><div class="bar-track"><div class="bar-fill" style="width:${v/max*100}%"></div></div><span>${v}</span></div>`).join(''):'<p class="muted">No records yet.</p>'}</div>`;
+}
+function loadHistory(){const rows=read('skycast_history',[]);$('history-body').innerHTML=rows.length?rows.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.crop)}</td><td>${esc(x.soil)}</td><td>${esc(x.stage)}</td><td>${esc(x.advice)}</td></tr>`).join(''):'<tr><td colspan="5">No advisory records yet.</td></tr>'}
+function clearHistory(){if(confirm('Clear advisory history from this browser?')){write('skycast_history',[]);loadHistory()}}
+function ask(q){$('chat-input').value=q;$('chat-input').focus()}
+function addChat(who,msg,cls){const el=document.createElement('div');el.className='bubble '+cls;el.textContent=who+': '+msg;$('chat-messages').appendChild(el);$('chat-messages').scrollTop=$('chat-messages').scrollHeight}
+function sendChat(e){e.preventDefault();const q=$('chat-input').value.trim();if(!q)return;addChat('You',q,'user');$('chat-input').value='';const s=q.toLowerCase();let reply;
+if(/hello|hi|namaste/.test(s))reply='Namaste! Ask me about crops, soil, irrigation, fertilizer or weather.';
+else if(s.includes('wheat'))reply='Wheat is generally a Rabi crop. It prefers cool growing conditions. Use soil-test-based nutrients and avoid waterlogging.';
+else if(s.includes('rice')||s.includes('paddy'))reply='Rice is commonly a Kharif crop and needs reliable water. Manage field water carefully and follow local recommendations.';
+else if(s.includes('mustard'))reply='Mustard is commonly a Rabi crop. It generally needs well-drained soil; avoid excess irrigation and monitor for pests.';
+else if(s.includes('soil'))reply='Loamy soil is often suitable for many crops. A soil test helps determine pH and nutrient needs before adding fertilizers.';
+else if(s.includes('irrigat')||s.includes('water'))reply='Check soil moisture before irrigation. Consider crop stage, soil type and rainfall; avoid overwatering and waterlogging.';
+else if(s.includes('fertiliz')||s.includes('urea'))reply='Use fertilizer according to a soil test and local agriculture department guidance. Avoid applying excess fertilizer.';
+else if(s.includes('weather')||s.includes('rain'))reply='Open the Weather Dashboard and enter your city to view current conditions and a 7-day forecast.';
+else if(s.includes('crop')||s.includes('recommend'))reply='Open Crop Recommendation and enter temperature, humidity and rainfall for a rule-based top-three crop estimate.';
+else reply='I can help with basic information about wheat, rice, mustard, soil, irrigation, fertilizer and weather. Please ask a specific question.';
+setTimeout(()=>addChat('🌱 SkyBot',reply,'bot'),180)}
+loadProfile();
+</script>
+</body></html>
